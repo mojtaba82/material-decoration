@@ -30,6 +30,7 @@
 #include <KColorUtils>
 
 // Qt
+#include <QCoreApplication>
 #include <QDebug>
 #include <QLoggingCategory>
 #include <QAction>
@@ -56,6 +57,17 @@ TextButton::TextButton(Decoration *decoration, const int buttonIndex, QObject *p
 
     connect(this, &TextButton::clicked,
         this, &TextButton::trigger);
+
+    connect(this, &TextButton::pressedChanged, this,
+        [this] {
+            qCDebug(category) << "TextButton::pressedChanged" << this->isPressed();
+        }
+    );
+    connect(this, &TextButton::hoveredChanged, this,
+        [this] {
+            qCDebug(category) << "TextButton::hoveredChanged" << this->isHovered();
+        }
+    );
 }
 
 TextButton::~TextButton()
@@ -185,40 +197,89 @@ void TextButton::mousePressEvent(QMouseEvent *event)
     xcb_ungrab_pointer( connection, XCB_TIME_CURRENT_TIME );
     //---
 
-    DecorationButton::mouseReleaseEvent(event);
+    qCDebug(category) << "    event->type()" << event->type();
+    qCDebug(category) << "    event->localPos()" << event->localPos();
+    qCDebug(category) << "    event->buttons()" << event->buttons();
+    qCDebug(category) << "    event->button()" << event->button();
+
+    const auto qtReleaseEvent = new QMouseEvent(
+        QEvent::MouseButtonRelease,
+        event->localPos(),
+        event->windowPos(),
+        event->screenPos(),
+        event->button(),
+        Qt::NoButton, // event->buttons() ^ event->button(),
+        event->modifiers(),
+        event->source()
+    );
+    qCDebug(category) << "    qtReleaseEvent->type()" << qtReleaseEvent->type();
+    qCDebug(category) << "    qtReleaseEvent->localPos()" << qtReleaseEvent->localPos();
+    qCDebug(category) << "    qtReleaseEvent->buttons()" << qtReleaseEvent->buttons();
+    qCDebug(category) << "    qtReleaseEvent->button()" << qtReleaseEvent->button();
+    DecorationButton::mouseReleaseEvent(qtReleaseEvent);
+    // QCoreApplication::instance()->sendEvent(this, qtReleaseEvent);
+
+    const auto qtHoverLeaveEvent = new QHoverEvent(
+        QEvent::HoverLeave,
+        QPointF(0, 0),
+        event->localPos(),
+        event->modifiers()
+    );
+    qCDebug(category) << "    qtHoverLeaveEvent->type()" << qtHoverLeaveEvent->type();
+    qCDebug(category) << "    qtHoverLeaveEvent->pos()" << qtHoverLeaveEvent->posF();
+    qCDebug(category) << "    qtHoverLeaveEvent->oldPos()" << qtHoverLeaveEvent->oldPosF();
+    DecorationButton::hoverLeaveEvent(qtHoverLeaveEvent);
+    // QCoreApplication::instance()->sendEvent(this, qtHoverLeaveEvent);
+
+    const auto qtMoveEvent = new QMouseEvent(
+        QEvent::MouseMove,
+        QPointF(-1, -1),
+        QPointF(-1, -1),
+        Qt::NoButton,
+        Qt::NoButton,
+        Qt::NoModifier
+    );
+    qCDebug(category) << "    qtMoveEvent->type()" << qtMoveEvent->type();
+    qCDebug(category) << "    qtMoveEvent->localPos()" << qtMoveEvent->localPos();
+    qCDebug(category) << "    qtMoveEvent->buttons()" << qtMoveEvent->buttons();
+    qCDebug(category) << "    qtMoveEvent->button()" << qtMoveEvent->button();
+    DecorationButton::mouseMoveEvent(qtMoveEvent);
+    // QCoreApplication::instance()->sendEvent(this, qtMoveEvent);
+
+    event->setAccepted(true);
 }
 
 QColor TextButton::backgroundColor() const
 {
-    const auto *buttonGroup = qobject_cast<AppMenuButtonGroup *>(parent());
-    if (buttonGroup
-        && buttonGroup->currentIndex() >= 0
-        && buttonGroup->currentIndex() != m_buttonIndex
-    ) {
-        return Qt::transparent;
-    } else {
+    // const auto *buttonGroup = qobject_cast<AppMenuButtonGroup *>(parent());
+    // if (buttonGroup
+    //     && buttonGroup->currentIndex() >= 0
+    //     && buttonGroup->currentIndex() != m_buttonIndex
+    // ) {
+    //     return Qt::transparent;
+    // } else {
         return CommonToggleButton::backgroundColor();
-    }
+    // }
 }
 
 QColor TextButton::foregroundColor() const
 {
-    const auto *buttonGroup = qobject_cast<AppMenuButtonGroup *>(parent());
-    if (buttonGroup
-        && buttonGroup->currentIndex() >= 0
-        && buttonGroup->currentIndex() != m_buttonIndex
-    ) {
-        const auto *deco = qobject_cast<Decoration *>(decoration());
-        if (!deco) {
-            return {};
-        }
-        return KColorUtils::mix(
-            deco->titleBarBackgroundColor(),
-            deco->titleBarForegroundColor(),
-            0.8);
-    } else {
+    // const auto *buttonGroup = qobject_cast<AppMenuButtonGroup *>(parent());
+    // if (buttonGroup
+    //     && buttonGroup->currentIndex() >= 0
+    //     && buttonGroup->currentIndex() != m_buttonIndex
+    // ) {
+    //     const auto *deco = qobject_cast<Decoration *>(decoration());
+    //     if (!deco) {
+    //         return {};
+    //     }
+    //     return KColorUtils::mix(
+    //         deco->titleBarBackgroundColor(),
+    //         deco->titleBarForegroundColor(),
+    //         0.8);
+    // } else {
         return CommonToggleButton::foregroundColor();
-    }
+    // }
 }
 
 
