@@ -48,14 +48,17 @@ public:
 
 public slots:
     void init() override;
+    void reconfigure();
 
 private:
     void updateBorders();
     void updateResizeBorders();
     void updateTitleBar();
+    void updateButtonHeight(KDecoration2::DecorationButtonGroup *buttonGroup, int titleBarHeight);
     void updateButtonsGeometry();
     void updateShadow();
 
+    int buttonHeight() const;
     int titleBarHeight() const;
     int captionMinWidth() const;
     int getTextWidth(const QString text, bool showMnemonic = false) const;
@@ -72,6 +75,8 @@ private:
     KDecoration2::DecorationButtonGroup *m_leftButtons;
     KDecoration2::DecorationButtonGroup *m_rightButtons;
     AppMenuButtonGroup *m_menuButtons;
+
+    KDecoration2::BorderSize m_buttonSize;
 
     friend class AppMenuButtonGroup;
     friend class Button;

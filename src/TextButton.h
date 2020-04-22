@@ -57,6 +57,9 @@ public:
     QString text() const;
     void setText(const QString set);
 
+    void setHeight(int titleBarHeight) override;
+    void updateGeometry();
+
     QColor backgroundColor() const override;
     QColor foregroundColor() const override;
 

@@ -8,7 +8,9 @@ find_package (Qt5 REQUIRED COMPONENTS
 find_package (KF5 REQUIRED COMPONENTS
     Config
     CoreAddons
+    ConfigWidgets
     GuiAddons
+    I18n
     WindowSystem
 )
 
@@ -35,8 +37,13 @@ set (decoration_SRCS
     Decoration.cc
     MenuOverflowButton.cc
     TextButton.cc
+    ConfigurationModule.cc
     plugin.cc
 )
+
+# kconfig_add_kcfg_files(breezedecoration_SRCS
+#     SettingsConfig.kcfgc
+# )
 
 add_library (materialdecoration MODULE
     ${decoration_SRCS}
@@ -50,7 +57,9 @@ target_link_libraries (materialdecoration
         Qt5::X11Extras
         KF5::ConfigCore
         KF5::ConfigGui
+        KF5::ConfigWidgets
         KF5::CoreAddons
+        KF5::I18n
         KF5::GuiAddons
         KF5::WindowSystem
         XCB::XCB
