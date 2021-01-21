@@ -156,21 +156,25 @@ void ConfigurationModule::init()
 
     QSpinBox *marginLeft = new QSpinBox(marginTab);
     marginLeft->setMinimum(0);
+    marginLeft->setMaximum(999);
     marginLeft->setObjectName(QStringLiteral("kcfg_MarginLeft"));
     marginForm->addRow(i18ndc("breeze_kwin_deco", "margin left", "Margin Left:"), marginLeft);
     
     QSpinBox *marginLeftMaximized = new QSpinBox(marginTab);
     marginLeftMaximized->setMinimum(0);
+    marginLeftMaximized->setMaximum(999);
     marginLeftMaximized->setObjectName(QStringLiteral("kcfg_MarginLeftMaximized"));
     marginForm->addRow(i18ndc("breeze_kwin_deco", "margin left aximized", "Margin Left Maximized:"), marginLeftMaximized);
     
     QSpinBox *marginRight = new QSpinBox(marginTab);
     marginRight->setMinimum(0);
+    marginRight->setMaximum(999);
     marginRight->setObjectName(QStringLiteral("kcfg_MarginRight"));
     marginForm->addRow(i18ndc("breeze_kwin_deco", "margin right", "Margin Right:"), marginRight);
     
     QSpinBox *marginRightMaximized = new QSpinBox(marginTab);
     marginRightMaximized->setMinimum(0);
+    marginRightMaximized->setMaximum(999);
     marginRightMaximized->setObjectName(QStringLiteral("kcfg_MarginRightMaximized"));
     marginForm->addRow(i18ndc("breeze_kwin_deco", "margin right maximized", "Margin Right Maximized:"), marginRightMaximized);
 

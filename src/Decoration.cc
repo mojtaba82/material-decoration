@@ -393,6 +393,7 @@ void Decoration::updateButtonsGeometry()
     
     const auto *decoratedClient = client().toStrongRef().data();
     const int marginLeft =  decoratedClient->isMaximized() ? m_internalSettings->marginLeftMaximized() : m_internalSettings->marginLeft();
+    const int marginRight =  decoratedClient->isMaximized() ? m_internalSettings->marginRightMaximized() : m_internalSettings->marginRight();
 
     if (!m_leftButtons->buttons().isEmpty()) {
         m_leftButtons->setPos(QPointF(marginLeft, 0));
@@ -400,7 +401,7 @@ void Decoration::updateButtonsGeometry()
     }
 
     if (!m_rightButtons->buttons().isEmpty()) {
-        m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width(), 0));
+        m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width() - marginRight, 0));
         m_rightButtons->setSpacing(0);
     }
 
@@ -420,7 +421,8 @@ void Decoration::updateButtonsGeometry()
             -m_rightButtons->geometry().width()
                 - settings()->smallSpacing()
                 - captionMinWidth()
-                - settings()->smallSpacing(),
+                - settings()->smallSpacing()
+                - marginRight,
             0
         );
         m_menuButtons->updateOverflow(availableRect);
