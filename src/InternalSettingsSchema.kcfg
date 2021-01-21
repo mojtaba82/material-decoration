@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name="kdecoration_materialrc"/>
+
+    <group name="Windeco">
+
+        <!-- button size -->
+        <entry name="ButtonSize" type="Enum">
+            <choices>
+                <choice name="ButtonTiny" />
+                <choice name="ButtonSmall" />
+                <choice name="ButtonDefault" />
+                <choice name="ButtonLarge" />
+                <choice name="ButtonVeryLarge" />
+            </choices>
+            <default>ButtonDefault</default>
+        </entry>
+
+        <!-- opacity -->
+        <entry name="ActiveOpacity" type="Double">
+            <default>0.75</default>
+        </entry>
+        <entry name="InactiveOpacity" type="Double">
+            <default>0.85</default>
+        </entry>
+
+        <!-- animations -->
+        <entry name="AnimationsEnabled" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="AnimationsDuration" type="Int">
+            <default>250</default>
+        </entry>
+
+        <!-- shadow -->
+        <entry name="ShadowSize" type="Enum">
+            <choices>
+                <choice name="ShadowNone"/>
+                <choice name="ShadowSmall"/>
+                <choice name="ShadowMedium"/>
+                <choice name="ShadowLarge"/>
+                <choice name="ShadowVeryLarge"/>
+            </choices>
+            <default>ShadowVeryLarge</default>
+        </entry>
+        <entry name="ShadowColor" type="Color">
+            <default>33, 33, 33</default>
+        </entry>
+        <entry name="ShadowStrength" type="Int">
+            <default>255</default>
+            <min>25</min>
+            <max>255</max>
+        </entry>
+    </group>
+
+</kcfg>
