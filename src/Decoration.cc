@@ -390,20 +390,26 @@ void Decoration::updateButtonHeight()
 void Decoration::updateButtonsGeometry()
 {
     updateButtonHeight();
+    
+    const auto *decoratedClient = client().toStrongRef().data();
+    
+    const int marginLeft =  decoratedClient->isMaximized() ? m_internalSettings->marginLeftMaximized() : m_internalSettings->marginLeft();
+    const int marginRight =  decoratedClient->isMaximized() ? m_internalSettings->marginRightMaximized() : m_internalSettings->marginRight();
 
     if (!m_leftButtons->buttons().isEmpty()) {
-        m_leftButtons->setPos(QPointF(0, 0));
+        m_leftButtons->setPos(QPointF(marginLeft, 0));
         m_leftButtons->setSpacing(0);
     }
 
     if (!m_rightButtons->buttons().isEmpty()) {
-        m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width(), 0));
+        m_rightButtons->setPos(QPointF(size().width() - m_rightButtons->geometry().width() - marginRight, 0));
         m_rightButtons->setSpacing(0);
     }
 
     if (!m_menuButtons->buttons().isEmpty()) {
         const bool leftButtonsVisible = !m_leftButtons->buttons().isEmpty();
         const int leftButtonsWidth = m_leftButtons->geometry().width()
+            + marginLeft
             + (leftButtonsVisible ? settings()->smallSpacing() : 0);
 
         m_menuButtons->setPos(QPointF(leftButtonsWidth, 0));
@@ -416,7 +422,8 @@ void Decoration::updateButtonsGeometry()
             -m_rightButtons->geometry().width()
                 - settings()->smallSpacing()
                 - captionMinWidth()
-                - settings()->smallSpacing(),
+                - settings()->smallSpacing()
+                - marginRight,
             0
         );
         m_menuButtons->updateOverflow(availableRect);
@@ -791,6 +798,9 @@ void Decoration::paintCaption(QPainter *painter, const QRect &repaintRegion) con
     Q_UNUSED(repaintRegion)
 
     const auto *decoratedClient = client().toStrongRef().data();
+    
+    const int marginLeft =  decoratedClient->isMaximized() ? m_internalSettings->marginLeftMaximized() : m_internalSettings->marginLeft();
+    const int marginRight =  decoratedClient->isMaximized() ? m_internalSettings->marginRightMaximized() : m_internalSettings->marginRight();
 
     const int textWidth = settings()->fontMetrics().boundingRect(decoratedClient->caption()).width();
     const QRect textRect((size().width() - textWidth) / 2, 0, textWidth, titleBarHeight());
@@ -807,10 +817,12 @@ void Decoration::paintCaption(QPainter *painter, const QRect &repaintRegion) con
 
     const QRect availableRect = titleBarRect.adjusted(
             + leftButtonsWidth
-            + menuButtonsWidth,
+            + menuButtonsWidth
+            + marginLeft,
         0,
         -m_rightButtons->geometry().width()
-            - settings()->smallSpacing(),
+            - settings()->smallSpacing()
+            - marginRight,
         0
     );
 

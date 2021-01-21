@@ -43,6 +43,10 @@ private:
     int m_shadowSize;
     int m_shadowStrength;
     QColor m_shadowColor;
+    int m_marginLeft;
+    int m_marginLeftMaximized;
+    int m_marginRight;
+    int m_marginRightMaximized;
 };
 
 } // namespace Material
