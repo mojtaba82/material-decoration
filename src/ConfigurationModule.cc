@@ -147,6 +147,32 @@ void ConfigurationModule::init()
     KColorButton *shadowColor = new KColorButton(shadowTab);
     shadowColor->setObjectName(QStringLiteral("kcfg_ShadowColor"));
     shadowForm->addRow(i18nd("breeze_kwin_deco", "Color:"), shadowColor);
+    
+    //--- Margins
+    QWidget *marginTab = new QWidget(tabWidget);
+    tabWidget->addTab(marginTab, i18nd("breeze_kwin_deco", "Margins"));
+    QFormLayout *marginForm = new QFormLayout(marginTab);
+    marginTab->setLayout(marginForm);
+
+    QSpinBox *marginLeft = new QSpinBox(marginTab);
+    marginLeft->setMinimum(0);
+    marginLeft->setObjectName(QStringLiteral("kcfg_MarginLeft"));
+    marginForm->addRow(i18ndc("breeze_kwin_deco", "margin left", "Margin Left:"), marginLeft);
+    
+    QSpinBox *marginLeftMaximized = new QSpinBox(marginTab);
+    marginLeftMaximized->setMinimum(0);
+    marginLeftMaximized->setObjectName(QStringLiteral("kcfg_MarginLeftMaximized"));
+    marginForm->addRow(i18ndc("breeze_kwin_deco", "margin left aximized", "Margin Left Maximized:"), marginLeftMaximized);
+    
+    QSpinBox *marginRight = new QSpinBox(marginTab);
+    marginRight->setMinimum(0);
+    marginRight->setObjectName(QStringLiteral("kcfg_MarginRight"));
+    marginForm->addRow(i18ndc("breeze_kwin_deco", "margin right", "Margin Right:"), marginRight);
+    
+    QSpinBox *marginRightMaximized = new QSpinBox(marginTab);
+    marginRightMaximized->setMinimum(0);
+    marginRightMaximized->setObjectName(QStringLiteral("kcfg_MarginRightMaximized"));
+    marginForm->addRow(i18ndc("breeze_kwin_deco", "margin right maximized", "Margin Right Maximized:"), marginRightMaximized);
 
     //--- Config Bindings
     skel->addItemInt(
@@ -197,6 +223,30 @@ void ConfigurationModule::init()
         m_shadowColor,
         QColor(33, 33, 33)
     ), QStringLiteral("ShadowColor"));
+    skel->addItemInt(
+        QStringLiteral("MarginLeft"),
+        m_marginLeft,
+        0,
+        QStringLiteral("MarginLeft")
+    );
+    skel->addItemInt(
+        QStringLiteral("MarginLeftMaximized"),
+        m_marginLeftMaximized,
+        0,
+        QStringLiteral("MarginLeftMaximized")
+    );
+    skel->addItemInt(
+        QStringLiteral("MarginRight"),
+        m_marginRight,
+        0,
+        QStringLiteral("MarginRight")
+    );
+    skel->addItemInt(
+        QStringLiteral("MarginRightMaximized"),
+        m_marginRightMaximized,
+        0,
+        QStringLiteral("MarginRightMaximized")
+    );
 
     //---
     addConfig(skel, this);
