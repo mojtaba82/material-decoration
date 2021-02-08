@@ -21,19 +21,6 @@ Upstream LIM discussion in the KDE Bug report: https://bugs.kde.org/show_bug.cgi
 
 ### Installation
 
-#### Binary package
-
-- Arch/Manjaro (AUR):  
-  Install the `material-kwin-decoration-git` AUR package.  
-  https://aur.archlinux.org/packages/material-kwin-decoration-git/
-
-- openSUSE:  
-  https://build.opensuse.org/package/show/home:trmdi/material-decoration
-```
-sudo zypper ar obs://home:trmdi trmdi
-sudo zypper in -r trmdi material-decoration
-```
-
 #### Building from source
 Build dependencies:
 
@@ -48,7 +35,7 @@ Download the source:
 
 ```
 cd ~/Downloads
-git clone https://github.com/Zren/material-decoration.git
+git clone https://github.com/mojtaba82/material-decoration.git
 cd material-decoration
 ```
 
