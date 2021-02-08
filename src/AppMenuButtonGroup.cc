@@ -511,7 +511,7 @@ void AppMenuButtonGroup::onHoveredChanged(bool hovered)
     if (m_alwaysShow) {
         setOpacity(1);
     } else {
-        if (m_animationEnabled) {
+        if (false && m_animationEnabled) {
             QAbstractAnimation::Direction dir = hovered ? QAbstractAnimation::Forward : QAbstractAnimation::Backward;
             if (m_animation->state() == QAbstractAnimation::Running && m_animation->direction() != dir) {
                 m_animation->stop();

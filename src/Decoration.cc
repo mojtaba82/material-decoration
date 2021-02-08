@@ -328,6 +328,7 @@ void Decoration::onSectionUnderMouseChanged(const Qt::WindowFrameSection value)
 {
     qCDebug(category) << "onSectionUnderMouseChanged" << value;
     updateTitleBarHoverState();
+//     update(titleBar());
 }
 
 void Decoration::updateBorders()
@@ -358,16 +359,23 @@ void Decoration::updateTitleBar()
 
 void Decoration::updateTitleBarHoverState()
 {
-    const bool wasHovered = m_menuButtons->hovered();
+//     const bool wasHovered = m_menuButtons->hovered();
     const bool isHovered = titleBarIsHovered();
-    if (!wasHovered && isHovered) {
-        // HoverEnter
+//     if (!wasHovered && isHovered) {
+//         HoverEnter
+//         m_menuButtons->setHovered(true);
+//     } else if (wasHovered && !isHovered) {
+//         HoverLeave
+//         m_menuButtons->setHovered(false);
+//     } else if (wasHovered && isHovered) {
+//         HoverMove
+//     }
+    if (isHovered) {
+        update(titleBar());
         m_menuButtons->setHovered(true);
-    } else if (wasHovered && !isHovered) {
-        // HoverLeave
+    } else {
         m_menuButtons->setHovered(false);
-    } else if (wasHovered && isHovered) {
-        // HoverMove
+        update(titleBar());
     }
 }
 
@@ -811,13 +819,13 @@ void Decoration::paintCaption(QPainter *painter, const QRect &repaintRegion) con
     const int leftButtonsWidth = m_leftButtons->geometry().width()
         + (leftButtonsVisible ? settings()->smallSpacing() : 0);
 
-    const bool appMenuVisible = !m_menuButtons->buttons().isEmpty();
-    const int menuButtonsWidth = m_menuButtons->geometry().width()
-        + (appMenuVisible ? appMenuCaptionSpacing() : 0);
+//     const bool appMenuVisible = !m_menuButtons->buttons().isEmpty();
+//     const int menuButtonsWidth = m_menuButtons->geometry().width()
+//         + (appMenuVisible ? appMenuCaptionSpacing() : 0);
 
     const QRect availableRect = titleBarRect.adjusted(
             + leftButtonsWidth
-            + menuButtonsWidth
+//             + menuButtonsWidth
             + marginLeft,
         0,
         -m_rightButtons->geometry().width()
@@ -829,16 +837,19 @@ void Decoration::paintCaption(QPainter *painter, const QRect &repaintRegion) con
     QRect captionRect;
     Qt::Alignment alignment;
 
-    if (textRect.left() < availableRect.left()) {
-        captionRect = availableRect;
-        alignment = Qt::AlignLeft | Qt::AlignVCenter;
-    } else if (availableRect.right() < textRect.right()) {
-        captionRect = availableRect;
-        alignment = Qt::AlignRight | Qt::AlignVCenter;
-    } else {
-        captionRect = titleBarRect;
-        alignment = Qt::AlignCenter;
-    }
+//     if (textRect.left() < availableRect.left()) {
+//         captionRect = availableRect;
+//         alignment = Qt::AlignLeft | Qt::AlignVCenter;
+//     } else if (availableRect.right() < textRect.right()) {
+//         captionRect = availableRect;
+//         alignment = Qt::AlignRight | Qt::AlignVCenter;
+//     } else {
+//         captionRect = titleBarRect;
+//         alignment = Qt::AlignCenter;
+//     }
+    captionRect = availableRect;
+    alignment = Qt::AlignLeft | Qt::AlignVCenter;;
+    
 
     const QString caption = painter->fontMetrics().elidedText(
         decoratedClient->caption(), Qt::ElideMiddle, captionRect.width());
@@ -848,10 +859,10 @@ void Decoration::paintCaption(QPainter *painter, const QRect &repaintRegion) con
 
     if (m_menuButtons->buttons().isEmpty()) {
         painter->setPen(titleBarForegroundColor());
-    } else { // menuButtons is visible
-        const int menuRight = m_menuButtons->geometry().right();
-        const int textLeft = textRect.left();
-        const int textRight = textRect.right();
+    } else/* { // menuButtons is visible
+//         const int menuRight = m_menuButtons->geometry().right();
+//         const int textLeft = textRect.left();
+//         const int textRight = textRect.right();
         // qCDebug(category) << "textLeft" << textLeft << "menuRight" << menuRight;
 
         if (m_menuButtons->overflowing()) { // hide caption leaving "whitespace" to easily grab.
@@ -864,17 +875,19 @@ void Decoration::paintCaption(QPainter *painter, const QRect &repaintRegion) con
             const int x2 = qMin(x1+fadeWidth, textRight);
             const float x1Ratio = (float)(x1-textLeft) / (float)textWidth;
             const float x2Ratio = (float)(x2-textLeft) / (float)textWidth;
-            // qCDebug(category) << "    " << "x2" << x2 << "x1R" << x1Ratio << "x2R" << x2Ratio;
+            qCDebug(category) << "    " << "x2" << x2 << "x1R" << x1Ratio << "x2R" << x2Ratio;
             QLinearGradient gradient(textRect.topLeft(), textRect.bottomRight());
             gradient.setColorAt(x1Ratio, Qt::transparent);
             gradient.setColorAt(x2Ratio, titleBarForegroundColor());
             QBrush brush(gradient);
             QPen pen(brush, 1);
             painter->setPen(pen);
-        } else { // caption is not covered by menuButtons
+        } else*/if (!titleBarIsHovered()) { // caption is not covered by menuButtons
             painter->setPen(titleBarForegroundColor());
+        } else {
+            painter->setPen(Qt::transparent);
         }
-    }
+//     }
 
     painter->drawText(captionRect, alignment, caption);
     painter->restore();
